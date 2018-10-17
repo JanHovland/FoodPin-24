@@ -6,6 +6,16 @@
 //  Copyright © 2018 AppCoda. All rights reserved.
 //
 
+
+// Nyttig informasjon for å generer riktig FoodFin-xx
+// 1. Hent komplett versjon fra swift-ios12-book
+// 2. Create local repository
+// 3. Create remote repository
+// 4. Sjekk atFoodFin-xx ikke finnes på aktuell katalog
+// 5. Lukk Xcode
+// 6. Åpne git og endre prosjektet til FoodFin-xx
+// 7. Åpne Xcode med prosjekt FoodFin-xx
+
 import UIKit
 import CoreData
 
