@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D19FC3BC2177929E00DC08BA /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D19FC3BB2177929E00DC08BA /* CloudKit.framework */; };
+		D19FC3BE21779B7800DC08BA /* DiscoverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19FC3BD21779B7800DC08BA /* DiscoverTableViewController.swift */; };
 		F41267552135566F0037EBFC /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F41267542135566F0037EBFC /* Onboarding.storyboard */; };
 		F4126757213684B90037EBFC /* WalkthroughContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4126756213684B90037EBFC /* WalkthroughContentViewController.swift */; };
 		F4126759213689170037EBFC /* WalkthroughPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4126758213689170037EBFC /* WalkthroughPageViewController.swift */; };
@@ -48,6 +50,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D19FC3BA2177929800DC08BA /* FoodPin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FoodPin.entitlements; sourceTree = "<group>"; };
+		D19FC3BB2177929E00DC08BA /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		D19FC3BD21779B7800DC08BA /* DiscoverTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewController.swift; sourceTree = "<group>"; };
 		D1EFF776217783EA00B66C6C /* Rubik-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-MediumItalic.ttf"; sourceTree = "<group>"; };
 		F41267542135566F0037EBFC /* Onboarding.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
 		F4126756213684B90037EBFC /* WalkthroughContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughContentViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4FD176A21291DEA0067EA4A /* MapKit.framework in Frameworks */,
+				D19FC3BC2177929E00DC08BA /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +129,7 @@
 		F44705AC211AF99E002E0327 /* FoodPin */ = {
 			isa = PBXGroup;
 			children = (
+				D19FC3BA2177929800DC08BA /* FoodPin.entitlements */,
 				F4FD17632127E0CC0067EA4A /* Extensions */,
 				F4BFD8A12123CC2C00EB88E6 /* Resources */,
 				F481ACB4212345BB00B6DC2F /* Storyboard */,
@@ -150,6 +157,7 @@
 				F412675A21368CDB0037EBFC /* WalkthroughViewController.swift */,
 				F460D4102139573D00C2F6FE /* AboutTableViewController.swift */,
 				F44477FF213BAB84009D66B4 /* WebViewController.swift */,
+				D19FC3BD21779B7800DC08BA /* DiscoverTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -225,6 +233,7 @@
 		F4FD176821291DEA0067EA4A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D19FC3BB2177929E00DC08BA /* CloudKit.framework */,
 				F4FD176921291DEA0067EA4A /* MapKit.framework */,
 			);
 			name = Frameworks;
@@ -264,6 +273,12 @@
 						CreatedOnToolsVersion = 10.0;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
 								enabled = 1;
 							};
 						};
@@ -318,6 +333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D19FC3BE21779B7800DC08BA /* DiscoverTableViewController.swift in Sources */,
 				F4CDB81B2123F00400FF388A /* RestaurantDetailHeaderView.swift in Sources */,
 				F4447800213BAB84009D66B4 /* WebViewController.swift in Sources */,
 				F481ACB22123383100B6DC2F /* Restaurant.swift in Sources */,
@@ -493,6 +509,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FoodPin/FoodPin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6UR9TA6744;
 				INFOPLIST_FILE = FoodPin/Info.plist;
@@ -500,7 +517,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.FoodPin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.FoodPin24;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -511,6 +528,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FoodPin/FoodPin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6UR9TA6744;
 				INFOPLIST_FILE = FoodPin/Info.plist;
@@ -518,7 +536,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.FoodPin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.FoodPin24;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
