@@ -69,6 +69,8 @@ class DiscoverTableViewController: UITableViewController {
         // Create the query operation with the query
         
         let queryOperation = CKQueryOperation(query: query)
+ 
+        // Det tar lang tid å hente bildene siden de er så store
         
         queryOperation.desiredKeys = ["name", "image"]
         queryOperation.queuePriority = .veryHigh
