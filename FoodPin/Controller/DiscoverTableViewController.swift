@@ -13,11 +13,27 @@ class DiscoverTableViewController: UITableViewController {
 
     var restaurants: [CKRecord] = []
     
+    var spinner = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.cellLayoutMarginsFollowReadableWidth = true
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        spinner.style = .gray
+        spinner.hidesWhenStopped = true
+        view.addSubview(spinner)
+        
+        // Define layout constraints for the spinner
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([spinner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150.0),
+                                     spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
+        
+        // Activate the spinner
+        
+        spinner.startAnimating()
+        
         
         // Configure navigation bar appearence
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -50,23 +66,34 @@ class DiscoverTableViewController: UITableViewController {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Restaurant", predicate: predicate)
         
-        publicDatabase.perform(query, inZoneWith: nil, completionHandler: {
-            (results, error) -> Void in
-            
+        // Create the query operation with the query
+        
+        let queryOperation = CKQueryOperation(query: query)
+        
+        queryOperation.desiredKeys = ["name", "image"]
+        queryOperation.queuePriority = .veryHigh
+        queryOperation.resultsLimit = 50
+        queryOperation.recordFetchedBlock = { (record) -> Void in
+            self.restaurants.append(record)
+        }
+        
+        queryOperation.queryCompletionBlock = { [unowned self] (cursor, error) -> Void in
+           
             if let error = error {
-                print(error)
+                print("Failed to get data from iCloud - \(error.localizedDescription)")
                 return
             }
             
-            if let results = results {
-                print("Completed the download of Restaurant data")
-                self.restaurants = results
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+            print("Successfully retrieved the data from iCloud")
+            
+            
+            DispatchQueue.main.async {
+               self.spinner.stopAnimating()
+               self.tableView.reloadData()
             }
-        })
+        }
+        
+        publicDatabase.add(queryOperation)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
