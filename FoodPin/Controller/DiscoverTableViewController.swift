@@ -10,10 +10,11 @@ import UIKit
 import CloudKit
 
 class DiscoverTableViewController: UITableViewController {
-
     var restaurants: [CKRecord] = []
     
     var spinner = UIActivityIndicatorView()
+    
+    private var imageCache = NSCache<CKRecord.ID, NSURL>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +73,8 @@ class DiscoverTableViewController: UITableViewController {
  
         // Det tar lang tid å hente bildene siden de er så store
         
-        queryOperation.desiredKeys = ["name", "image"]
+//        queryOperation.desiredKeys = ["name", "image"]
+        queryOperation.desiredKeys = ["name"]
         queryOperation.queuePriority = .veryHigh
         queryOperation.resultsLimit = 50
         queryOperation.recordFetchedBlock = { (record) -> Void in
@@ -99,21 +101,62 @@ class DiscoverTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverCell", for: indexPath)
-
+        
         // Configure the cell...
         
         let restaurant = restaurants[indexPath.row]
         cell.textLabel?.text = restaurant.object(forKey: "name") as? String
         
-        if let image = restaurant.object(forKey: "image"), let imageAsset = image as? CKAsset {
-
-            if let imageData = try? Data.init(contentsOf: imageAsset.fileURL) {
-
+        // Set the default image
+        cell.imageView?.image = UIImage(named: "photo")
+        
+        // Check if the image is stored in cache
+        if let imageFileURL = imageCache.object(forKey: restaurant.recordID) {
+            
+            // Fetch image from cache
+            print("Get image from cache")
+            if let imageData = try? Data.init(contentsOf: imageFileURL as URL) {
                 cell.imageView?.image = UIImage(data: imageData)
             }
+            
+        } else {
+            // Fetch Image from Cloud in background
+            
+            let publicDatabase = CKContainer.default().publicCloudDatabase
+            let fetchRecordsImageOperation = CKFetchRecordsOperation(recordIDs: [restaurant.recordID])
+            
+            fetchRecordsImageOperation.desiredKeys = ["image"]
+            fetchRecordsImageOperation.queuePriority = .veryHigh
+            
+            fetchRecordsImageOperation.perRecordCompletionBlock = { [unowned self] (record, recordID, error) -> Void in
+                if let error = error {
+                    print("Failed to get restaurant image: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let restaurantRecord = record,
+                    let image = restaurantRecord.object(forKey: "image"),
+                    let imageAsset = image as? CKAsset {
+                    
+                        if let imageData = try? Data.init(contentsOf: imageAsset.fileURL) {
+                        
+                            // Replace the placeholder image with the restaurant image
+                            DispatchQueue.main.async {
+                                cell.imageView?.image = UIImage(data: imageData)
+                                cell.setNeedsLayout()
+                            }
+                        
+                            // Add the image URL to cache
+                            self.imageCache.setObject(imageAsset.fileURL as NSURL, forKey: restaurant.recordID)
+                        }
+                    }
+               }
+            
+            publicDatabase.add(fetchRecordsImageOperation)
         }
-
+        
         return cell
     }
     
